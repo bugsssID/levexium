@@ -311,12 +311,10 @@
             '<div class="text-center py-8 text-gray-400">Loading...</div>';
           coinModal.classList.remove("hidden");
           try {
-            // Fetch detail coin
+            // Fetch detail coin dan chart pakai proxy CORS
             const [detailRes, chartRes] = await Promise.all([
-              fetch(`https://api.coingecko.com/api/v3/coins/${coinId}`),
-              fetch(
-                `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7&interval=daily`
-              ),
+              fetch(`https://corsproxy.io/?https://api.coingecko.com/api/v3/coins/${coinId}`),
+              fetch(`https://corsproxy.io/?https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7&interval=daily`)
             ]);
             const detail = await detailRes.json();
             const chart = await chartRes.json();
