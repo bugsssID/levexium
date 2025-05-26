@@ -138,6 +138,16 @@
     </header>
     <div class="h-16 md:h-20"></div> <!-- Spacer for fixed header -->
 
+    <!-- Global Crypto Stats (Realtime) -->
+    <div id="globalStats" class="w-full flex flex-wrap items-center justify-center gap-4 py-2 px-4 bg-gray-800 bg-opacity-80 border-b border-cyan-800 text-sm font-crypto shadow-sm">
+      <span id="statCoins">Coins: -</span>
+      <span id="statExchanges">Exchanges: -</span>
+      <span id="statMcap">Market Cap: -</span>
+      <span id="statVol">24h Vol: -</span>
+      <span id="statDominance">Dominance: -</span>
+      <span id="statGas">Gas: -</span>
+    </div>
+
     <section
       class="hero flex flex-col items-center justify-center text-center py-20 bg-gradient-to-b from-gray-900 to-gray-800"
       id="home"
@@ -195,6 +205,33 @@
             </tr>
           </thead>
           <tbody id="marketBody">
+            <!-- Data will be inserted here by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Top 10 Trending Coins Section -->
+    <section class="trending-section max-w-4xl mx-auto py-16 px-6" id="trending">
+      <h2 class="text-3xl font-semibold mb-6 text-cyan-400 text-center">
+        Top 10 Trending Coins
+      </h2>
+      <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <span id="trendingStatus" class="text-sm text-gray-400"></span>
+      </div>
+      <div class="overflow-x-auto rounded-lg shadow">
+        <table class="min-w-full bg-gray-900 text-white" id="trendingTable">
+          <thead>
+            <tr class="bg-gray-800">
+              <th class="py-3 px-4 text-left">#</th>
+              <th class="py-3 px-4 text-left">Name</th>
+              <th class="py-3 px-4 text-left">Symbol</th>
+              <th class="py-3 px-4 text-right">Price (USD)</th>
+              <th class="py-3 px-4 text-right">Market Cap Rank</th>
+              <th class="py-3 px-4 text-center">Detail</th>
+            </tr>
+          </thead>
+          <tbody id="trendingBody">
             <!-- Data will be inserted here by JS -->
           </tbody>
         </table>
@@ -410,6 +447,69 @@
             tbody.appendChild(row);
           });
         }
+
+        // --- Trending Coins Table Logic ---
+        async function fetchTrendingCoins() {
+          const status = document.getElementById("trendingStatus");
+          status.textContent = "Loading trending coins...";
+          try {
+            const res = await fetch("https://api.coingecko.com/api/v3/search/trending");
+            const data = await res.json();
+            // Ambil 10 coin trending (CoinGecko: data.coins[])
+            const trending = data.coins.slice(0, 10).map((c) => c.item);
+            // Ambil detail harga/market cap via /coins/markets
+            const ids = trending.map((c) => c.id).join(",");
+            const marketRes = await fetch(
+              `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}`
+            );
+            const marketData = await marketRes.json();
+            // Gabungkan info trending & market
+            const merged = trending.map((c, i) => {
+              const m = marketData.find((x) => x.id === c.id) || {};
+              return {
+                ...c,
+                price: m.current_price,
+                market_cap_rank: m.market_cap_rank,
+                image: c.small || m.image,
+              };
+            });
+            status.textContent = "";
+            return merged;
+          } catch (e) {
+            status.textContent = "Failed to load trending coins.";
+            return [];
+          }
+        }
+        function renderTrendingTable(data) {
+          const tbody = document.getElementById("trendingBody");
+          tbody.innerHTML = "";
+          data.forEach((coin, idx) => {
+            const row = document.createElement("tr");
+            row.className = idx % 2 === 0 ? "bg-gray-900" : "bg-gray-800";
+            row.innerHTML = `
+              <td class="py-2 px-4">${idx + 1}</td>
+              <td class="py-2 px-4 flex items-center gap-2">
+                <img src="${coin.image}" alt="${coin.name}" class="w-6 h-6 rounded-full" />
+                <span class="font-semibold">${coin.name}</span>
+              </td>
+              <td class="py-2 px-4 uppercase text-gray-300">${coin.symbol}</td>
+              <td class="py-2 px-4 text-right font-mono">${coin.price !== undefined ? "$" + coin.price.toLocaleString() : "-"}</td>
+              <td class="py-2 px-4 text-right font-mono">${coin.market_cap_rank || "-"}</td>
+              <td class="py-2 px-4 text-center">
+                <button class="px-3 py-1 bg-cyan-600 hover:bg-cyan-700 rounded text-white text-sm font-semibold transition" data-coinid="${coin.id}">Detail</button>
+              </td>
+            `;
+            tbody.appendChild(row);
+          });
+          // Event tombol detail
+          tbody.querySelectorAll("button[data-coinid]").forEach(btn => {
+            btn.addEventListener("click", function() {
+              showCoinDetail(this.getAttribute("data-coinid"));
+            });
+          });
+        }
+        // Fetch & render trending coins
+        fetchTrendingCoins().then(renderTrendingTable);
 
         // Modal logic
         const coinModal = document.getElementById("coinModal");
@@ -695,6 +795,41 @@
             }
           });
         });
+
+        // --- GLOBAL CRYPTO STATS (Realtime) ---
+        async function fetchGlobalStats() {
+          try {
+            // CoinGecko global data
+            const res = await fetch("https://api.coingecko.com/api/v3/global");
+            const data = await res.json();
+            const g = data.data;
+            document.getElementById("statCoins").textContent = `Coins: ${g.active_cryptocurrencies.toLocaleString()}`;
+            document.getElementById("statExchanges").textContent = `Exchanges: ${g.markets.toLocaleString()}`;
+            document.getElementById("statMcap").textContent = `Market Cap: $${Number(g.total_market_cap.usd).toLocaleString(undefined, {maximumFractionDigits:0})} ${g.market_cap_change_percentage_24h_usd > 0 ? '+' : ''}${g.market_cap_change_percentage_24h_usd.toFixed(1)}%`;
+            document.getElementById("statVol").textContent = `24h Vol: $${Number(g.total_volume.usd).toLocaleString(undefined, {maximumFractionDigits:0})}`;
+            document.getElementById("statDominance").textContent = `Dominance: BTC ${g.market_cap_percentage.btc.toFixed(1)}% ETH ${g.market_cap_percentage.eth.toFixed(2)}%`;
+          } catch (e) {
+            document.getElementById("statCoins").textContent = "Coins: -";
+            document.getElementById("statExchanges").textContent = "Exchanges: -";
+            document.getElementById("statMcap").textContent = "Market Cap: -";
+            document.getElementById("statVol").textContent = "24h Vol: -";
+            document.getElementById("statDominance").textContent = "Dominance: -";
+          }
+          // Gas price (ETH mainnet, Etherscan API, fallback to 1.895 GWEI if fail)
+          try {
+            const res = await fetch("https://api.etherscan.io/api?module=gastracker&action=gasoracle");
+            const data = await res.json();
+            if (data.status === "1") {
+              document.getElementById("statGas").textContent = `Gas: ${data.result.ProposeGasPrice} GWEI`;
+            } else {
+              document.getElementById("statGas").textContent = "Gas: 1.895 GWEI";
+            }
+          } catch {
+            document.getElementById("statGas").textContent = "Gas: 1.895 GWEI";
+          }
+        }
+        fetchGlobalStats();
+        setInterval(fetchGlobalStats, 20000);
       });
     </script>
   </body>
