@@ -10,31 +10,65 @@
     />
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Hamburger animation */
+      .hamburger {
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.35rem;
+        cursor: pointer;
+        z-index: 50;
+      }
+      .hamburger-bar {
+        width: 1.7rem;
+        height: 0.22rem;
+        background: #22d3ee;
+        border-radius: 9999px;
+        transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      }
+      .hamburger.active .bar1 {
+        transform: translateY(0.57rem) rotate(45deg);
+      }
+      .hamburger.active .bar2 {
+        opacity: 0;
+      }
+      .hamburger.active .bar3 {
+        transform: translateY(-0.57rem) rotate(-45deg);
+      }
+      .hamburger:hover .hamburger-bar {
+        background: #06b6d4;
+      }
+    </style>
   </head>
   <body class="bg-gray-900 text-white font-inter">
     <header
-      class="flex items-center justify-between px-8 py-4 bg-gray-800 shadow-md"
+      class="flex items-center justify-between px-8 py-4 bg-gray-800 shadow-md relative"
     >
-      <img
-        src="lg_lvx.jpg"
-        alt="Levexium Logo"
-        class="h-12"
-        title="Levexium"
-      />
-      <div class="flex flex-col md:flex-row md:items-center md:space-x-6">
+      <div class="flex items-center gap-4">
+        <img src="lg_lvx.jpg" alt="Levexium Logo" class="h-12" title="Levexium" />
         <span
           id="realtimeInfo"
-          class="text-sm text-cyan-400 font-semibold mb-2 md:mb-0 md:mr-4"
+          class="text-sm text-cyan-400 font-semibold"
           >Loading price...</span
         >
-        <nav class="space-x-6">
+      </div>
+      <!-- Hamburger button (mobile only, animated) -->
+      <button id="menuToggle" class="hamburger md:hidden absolute right-8 top-6 focus:outline-none" aria-label="Toggle menu">
+        <span class="hamburger-bar bar1"></span>
+        <span class="hamburger-bar bar2"></span>
+        <span class="hamburger-bar bar3"></span>
+      </button>
+      <div id="navMenu" class="flex flex-col md:flex-row md:items-center md:space-x-6 md:static absolute right-8 top-16 bg-gray-800 md:bg-transparent w-48 md:w-auto rounded-lg md:rounded-none shadow-lg md:shadow-none z-40 transition-all duration-200 ease-in-out md:flex md:opacity-100 opacity-0 pointer-events-none md:pointer-events-auto">
+        <nav class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6">
           <a href="#home" class="hover:text-cyan-400 transition">Home</a>
           <a href="#demo" class="hover:text-cyan-400 transition">Demo</a>
           <a href="#about" class="hover:text-cyan-400 transition">About</a>
           <a href="#market" class="hover:text-cyan-400 transition">Market</a>
-          <a href="#airdrop" class="hover:text-cyan-400 transition"
-            >Airdrop Protocol</a
-          >
+          <a href="#airdrop" class="hover:text-cyan-400 transition">Airdrop Protocol</a>
           <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
         </nav>
       </div>
@@ -240,12 +274,17 @@
         // Realtime BTC price in header
         async function fetchBTCPrice() {
           try {
-            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+            const res = await fetch(
+              "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+            );
             const data = await res.json();
             const btc = data.bitcoin.usd;
-            document.getElementById('realtimeInfo').textContent = `BTC: $${btc.toLocaleString()}`;
+            document.getElementById(
+              "realtimeInfo"
+            ).textContent = `BTC: $${btc.toLocaleString()}`;
           } catch (e) {
-            document.getElementById('realtimeInfo').textContent = 'BTC price unavailable';
+            document.getElementById("realtimeInfo").textContent =
+              "BTC price unavailable";
           }
         }
         fetchBTCPrice();
@@ -264,7 +303,8 @@
             return data;
           } catch (e) {
             console.error("Error fetching market data:", e); // Tambahkan log error
-            status.textContent = "Failed to load market data. (CORS or network error)";
+            status.textContent =
+              "Failed to load market data. (CORS or network error)";
             return [];
           }
         }
@@ -328,7 +368,9 @@
             // Fetch detail coin dan chart langsung ke CoinGecko
             const [detailRes, chartRes] = await Promise.all([
               fetch(`https://api.coingecko.com/api/v3/coins/${coinId}`),
-              fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7&interval=daily`)
+              fetch(
+                `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7&interval=daily`
+              ),
             ]);
             const detail = await detailRes.json();
             const chart = await chartRes.json();
@@ -438,16 +480,19 @@
             renderTable(filtered);
           });
 
-        // Airdrop Table Logic (Realtime from API)
+        // Airdrop Table Logic (Tokenless Protocols from DefiLlama)
         async function fetchAirdropData() {
           const status = document.getElementById("airdropStatus");
           if (status) status.textContent = "Loading airdrop data...";
           try {
-            // Ganti URL API berikut dengan endpoint API airdrop yang valid
-            const res = await fetch("https://api.llama.fi/airdrop/eligible");
+            const res = await fetch("https://api.llama.fi/protocols");
             const data = await res.json();
+            // Filter: hanya protokol yang belum punya token (tokenSymbol kosong/null)
+            const tokenless = data.filter(
+              (item) => !item.symbol && !item.tokenSymbol && !item.address
+            );
             if (status) status.textContent = "";
-            return data.protocols || [];
+            return tokenless;
           } catch (e) {
             if (status) status.textContent = "Failed to load airdrop data.";
             return [];
@@ -509,6 +554,31 @@
             );
             renderAirdropTable(filtered);
           });
+
+        // Hamburger menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        menuToggle.addEventListener('click', function() {
+          if (navMenu.classList.contains('opacity-0')) {
+            navMenu.classList.remove('opacity-0', 'pointer-events-none');
+            navMenu.classList.add('opacity-100', 'pointer-events-auto');
+            menuToggle.classList.add('active');
+          } else {
+            navMenu.classList.add('opacity-0', 'pointer-events-none');
+            navMenu.classList.remove('opacity-100', 'pointer-events-auto');
+            menuToggle.classList.remove('active');
+          }
+        });
+        // Tutup menu saat klik link (mobile)
+        navMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            if (window.innerWidth < 768) {
+              navMenu.classList.add('opacity-0', 'pointer-events-none');
+              navMenu.classList.remove('opacity-100', 'pointer-events-auto');
+              menuToggle.classList.remove('active');
+            }
+          });
+        });
       });
     </script>
   </body>
