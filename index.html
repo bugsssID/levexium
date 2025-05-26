@@ -237,20 +237,34 @@
     <script>
       // Fallback: jalankan script utama jika script.js tidak berjalan
       document.addEventListener("DOMContentLoaded", function () {
+        // Realtime BTC price in header
+        async function fetchBTCPrice() {
+          try {
+            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+            const data = await res.json();
+            const btc = data.bitcoin.usd;
+            document.getElementById('realtimeInfo').textContent = `BTC: $${btc.toLocaleString()}`;
+          } catch (e) {
+            document.getElementById('realtimeInfo').textContent = 'BTC price unavailable';
+          }
+        }
+        fetchBTCPrice();
+        setInterval(fetchBTCPrice, 15000);
+
         // Crypto Market Table Logic
         async function fetchMarketData() {
           const status = document.getElementById("marketStatus");
           status.textContent = "Loading market data...";
           try {
             const res = await fetch(
-              "https://corsproxy.io/?https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false"
+              "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false"
             );
             const data = await res.json();
             status.textContent = "";
             return data;
           } catch (e) {
             console.error("Error fetching market data:", e); // Tambahkan log error
-            status.textContent = "Failed to load market data.";
+            status.textContent = "Failed to load market data. (CORS or network error)";
             return [];
           }
         }
@@ -311,10 +325,10 @@
             '<div class="text-center py-8 text-gray-400">Loading...</div>';
           coinModal.classList.remove("hidden");
           try {
-            // Fetch detail coin dan chart pakai proxy CORS
+            // Fetch detail coin dan chart langsung ke CoinGecko
             const [detailRes, chartRes] = await Promise.all([
-              fetch(`https://corsproxy.io/?https://api.coingecko.com/api/v3/coins/${coinId}`),
-              fetch(`https://corsproxy.io/?https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7&interval=daily`)
+              fetch(`https://api.coingecko.com/api/v3/coins/${coinId}`),
+              fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7&interval=daily`)
             ]);
             const detail = await detailRes.json();
             const chart = await chartRes.json();
