@@ -165,6 +165,50 @@
       </button>
     </section>
 
+    <!-- Top Gainers & Top Losers Section -->
+    <section class="gainers-losers-section max-w-5xl mx-auto py-10 px-6" id="gainers-losers">
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-gray-800 rounded-xl shadow p-6">
+          <h3 class="text-2xl font-semibold mb-4 text-green-400 text-center">Top 5 Gainers (24h)</h3>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-white" id="gainersTable">
+              <thead>
+                <tr class="bg-gray-700">
+                  <th class="py-2 px-3 text-left">#</th>
+                  <th class="py-2 px-3 text-left">Name</th>
+                  <th class="py-2 px-3 text-left">Symbol</th>
+                  <th class="py-2 px-3 text-right">Price</th>
+                  <th class="py-2 px-3 text-right">24h %</th>
+                </tr>
+              </thead>
+              <tbody id="gainersBody">
+                <!-- Data will be inserted here by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="bg-gray-800 rounded-xl shadow p-6">
+          <h3 class="text-2xl font-semibold mb-4 text-red-400 text-center">Top 5 Losers (24h)</h3>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-white" id="losersTable">
+              <thead>
+                <tr class="bg-gray-700">
+                  <th class="py-2 px-3 text-left">#</th>
+                  <th class="py-2 px-3 text-left">Name</th>
+                  <th class="py-2 px-3 text-left">Symbol</th>
+                  <th class="py-2 px-3 text-right">Price</th>
+                  <th class="py-2 px-3 text-right">24h %</th>
+                </tr>
+              </thead>
+              <tbody id="losersBody">
+                <!-- Data will be inserted here by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="info-section max-w-3xl mx-auto py-16 px-6" id="about">
       <h2 class="text-3xl font-semibold mb-4 text-cyan-400">About Levexium</h2>
       <p class="text-gray-200">
@@ -830,6 +874,61 @@
         }
         fetchGlobalStats();
         setInterval(fetchGlobalStats, 20000);
+
+        // --- Top Gainers & Losers Logic ---
+        async function fetchGainersLosers() {
+          try {
+            // Ambil 100 besar market cap, lalu sort by 24h change
+            const res = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false");
+            const data = await res.json();
+            // Filter coin yang punya data perubahan harga
+            const filtered = data.filter(c => typeof c.price_change_percentage_24h === 'number');
+            // Top 5 gainers
+            const gainers = [...filtered].sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h).slice(0, 5);
+            // Top 5 losers
+            const losers = [...filtered].sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h).slice(0, 5);
+            return { gainers, losers };
+          } catch (e) {
+            return { gainers: [], losers: [] };
+          }
+        }
+        function renderGainersLosers({ gainers, losers }) {
+          const gainersBody = document.getElementById("gainersBody");
+          const losersBody = document.getElementById("losersBody");
+          gainersBody.innerHTML = "";
+          losersBody.innerHTML = "";
+          gainers.forEach((coin, idx) => {
+            const row = document.createElement("tr");
+            row.className = idx % 2 === 0 ? "bg-gray-900" : "bg-gray-800";
+            row.innerHTML = `
+              <td class="py-1 px-3">${idx + 1}</td>
+              <td class="py-1 px-3 flex items-center gap-2">
+                <img src="${coin.image}" alt="${coin.name}" class="w-5 h-5 rounded-full" />
+                <span class="font-semibold">${coin.name}</span>
+              </td>
+              <td class="py-1 px-3 uppercase text-gray-300">${coin.symbol}</td>
+              <td class="py-1 px-3 text-right font-mono">$${coin.current_price.toLocaleString()}</td>
+              <td class="py-1 px-3 text-right font-mono text-green-400">${coin.price_change_percentage_24h.toFixed(2)}%</td>
+            `;
+            gainersBody.appendChild(row);
+          });
+          losers.forEach((coin, idx) => {
+            const row = document.createElement("tr");
+            row.className = idx % 2 === 0 ? "bg-gray-900" : "bg-gray-800";
+            row.innerHTML = `
+              <td class="py-1 px-3">${idx + 1}</td>
+              <td class="py-1 px-3 flex items-center gap-2">
+                <img src="${coin.image}" alt="${coin.name}" class="w-5 h-5 rounded-full" />
+                <span class="font-semibold">${coin.name}</span>
+              </td>
+              <td class="py-1 px-3 uppercase text-gray-300">${coin.symbol}</td>
+              <td class="py-1 px-3 text-right font-mono">$${coin.current_price.toLocaleString()}</td>
+              <td class="py-1 px-3 text-right font-mono text-red-400">${coin.price_change_percentage_24h.toFixed(2)}%</td>
+            `;
+            losersBody.appendChild(row);
+          });
+        }
+        fetchGainersLosers().then(renderGainersLosers);
       });
     </script>
   </body>
