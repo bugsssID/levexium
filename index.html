@@ -49,6 +49,24 @@
         font-family: 'Orbitron', 'Inter', Arial, sans-serif;
         letter-spacing: 0.04em;
       }
+      /* Slide-in section animation */
+      .slide-section {
+        animation: slideInSection 0.7s cubic-bezier(0.4,0,0.2,1);
+      }
+      @keyframes slideInSection {
+        0% {
+          opacity: 0;
+          transform: translateX(60px);
+        }
+        60% {
+          opacity: 1;
+          transform: translateX(-8px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
     </style>
   </head>
   <body class="bg-gray-900 text-white font-inter">
@@ -620,6 +638,60 @@
               navMenu.classList.add("opacity-0", "pointer-events-none");
               navMenu.classList.remove("opacity-100", "pointer-events-auto");
               menuToggle.classList.remove("active");
+            }
+          });
+        });
+
+        // --- Smooth scroll & slide effect on menu navigation ---
+        const navLinks = navMenu.querySelectorAll("a[href^='#']");
+        navLinks.forEach(link => {
+          link.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href').slice(1);
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+              e.preventDefault();
+              // Scroll to section smoothly
+              targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              // Remove previous highlight
+              document.querySelectorAll('.slide-highlight').forEach(el => {
+                el.classList.remove('slide-highlight');
+              });
+              // Add highlight/slide effect
+              targetSection.classList.add('slide-highlight');
+              setTimeout(() => {
+                targetSection.classList.remove('slide-highlight');
+              }, 700); // effect duration
+            }
+          });
+        });
+        // --- End smooth scroll & slide effect ---
+
+        // --- MENU SLIDE EFFECT ---
+        function slideToSection(sectionId) {
+          const section = document.getElementById(sectionId);
+          if (!section) return;
+          // Remove anim from all sections
+          document.querySelectorAll("section").forEach(s => s.classList.remove("slide-section"));
+          // Scroll & animate
+          section.scrollIntoView({ behavior: "smooth" });
+          setTimeout(() => {
+            section.classList.add("slide-section");
+            setTimeout(() => section.classList.remove("slide-section"), 700);
+          }, 100); // delay to sync with scroll
+        }
+        // Ganti event klik menu nav agar pakai slideToSection
+        navMenu.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", (e) => {
+            const href = link.getAttribute("href");
+            if (href && href.startsWith("#")) {
+              e.preventDefault();
+              const sectionId = href.replace("#", "");
+              slideToSection(sectionId);
+              if (window.innerWidth < 768) {
+                navMenu.classList.add("opacity-0", "pointer-events-none");
+                navMenu.classList.remove("opacity-100", "pointer-events-auto");
+                menuToggle.classList.remove("active");
+              }
             }
           });
         });
