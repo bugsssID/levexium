@@ -8,6 +8,8 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Google Fonts: Orbitron for crypto style -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -28,7 +30,7 @@
         height: 0.22rem;
         background: #22d3ee;
         border-radius: 9999px;
-        transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
       .hamburger.active .bar1 {
         transform: translateY(0.57rem) rotate(45deg);
@@ -42,37 +44,81 @@
       .hamburger:hover .hamburger-bar {
         background: #06b6d4;
       }
+      /* Custom fonts */
+      .font-crypto {
+        font-family: 'Orbitron', 'Inter', Arial, sans-serif;
+        letter-spacing: 0.04em;
+      }
     </style>
   </head>
   <body class="bg-gray-900 text-white font-inter">
     <header
-      class="flex items-center justify-between px-8 py-4 bg-gray-800 shadow-md relative"
+      class="flex items-center justify-between px-6 md:px-12 py-3 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 shadow-lg fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-gray-700"
+      style="min-height:64px"
     >
-      <div class="flex items-center gap-4">
-        <img src="lg_lvx.jpg" alt="Levexium Logo" class="h-12" title="Levexium" />
+      <div class="flex items-center gap-3 md:gap-5">
+        <img
+          src="lg_lvx.jpg"
+          alt="Levexium Logo"
+          class="h-10 md:h-12 rounded-lg shadow-md border-2 border-cyan-400 bg-gray-900"
+          title="Levexium"
+        />
         <span
           id="realtimeInfo"
-          class="text-sm text-cyan-400 font-semibold"
-          >Loading price...</span
+          class="text-base md:text-lg text-cyan-400 font-bold tracking-wide bg-gray-800 bg-opacity-70 px-3 py-1 rounded-lg shadow-sm border border-cyan-700 font-crypto"
         >
+          Loading price...
+        </span>
       </div>
       <!-- Hamburger button (mobile only, animated) -->
-      <button id="menuToggle" class="hamburger md:hidden absolute right-8 top-6 focus:outline-none" aria-label="Toggle menu">
+      <button
+        id="menuToggle"
+        class="hamburger md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-cyan-400 bg-gray-900 bg-opacity-80 hover:bg-cyan-900 transition-all shadow-lg absolute right-6 top-3 focus:outline-none"
+        aria-label="Toggle menu"
+      >
         <span class="hamburger-bar bar1"></span>
         <span class="hamburger-bar bar2"></span>
         <span class="hamburger-bar bar3"></span>
       </button>
-      <div id="navMenu" class="flex flex-col md:flex-row md:items-center md:space-x-6 md:static absolute right-8 top-16 bg-gray-800 md:bg-transparent w-48 md:w-auto rounded-lg md:rounded-none shadow-lg md:shadow-none z-40 transition-all duration-200 ease-in-out md:flex md:opacity-100 opacity-0 pointer-events-none md:pointer-events-auto">
-        <nav class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6">
-          <a href="#home" class="hover:text-cyan-400 transition">Home</a>
-          <a href="#demo" class="hover:text-cyan-400 transition">Demo</a>
-          <a href="#about" class="hover:text-cyan-400 transition">About</a>
-          <a href="#market" class="hover:text-cyan-400 transition">Market</a>
-          <a href="#airdrop" class="hover:text-cyan-400 transition">Airdrop Protocol</a>
-          <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+      <div
+        id="navMenu"
+        class="flex flex-col md:flex-row md:items-center md:space-x-8 md:static absolute right-6 top-16 bg-gray-900 md:bg-transparent w-52 md:w-auto rounded-xl md:rounded-none shadow-2xl md:shadow-none z-40 transition-all duration-200 ease-in-out md:flex md:opacity-100 opacity-0 pointer-events-none md:pointer-events-auto border border-cyan-800 md:border-none"
+      >
+        <nav class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-8 text-lg font-semibold font-crypto">
+          <a
+            href="#home"
+            class="hover:text-cyan-400 px-4 py-2 rounded-lg transition focus:bg-cyan-900 focus:text-cyan-300"
+            >Home</a
+          >
+          <a
+            href="#demo"
+            class="hover:text-cyan-400 px-4 py-2 rounded-lg transition focus:bg-cyan-900 focus:text-cyan-300"
+            >Demo</a
+          >
+          <a
+            href="#about"
+            class="hover:text-cyan-400 px-4 py-2 rounded-lg transition focus:bg-cyan-900 focus:text-cyan-300"
+            >About</a
+          >
+          <a
+            href="#market"
+            class="hover:text-cyan-400 px-4 py-2 rounded-lg transition focus:bg-cyan-900 focus:text-cyan-300"
+            >Market</a
+          >
+          <a
+            href="#airdrop"
+            class="hover:text-cyan-400 px-4 py-2 rounded-lg transition focus:bg-cyan-900 focus:text-cyan-300"
+            >Airdrop Protocol</a
+          >
+          <a
+            href="#contact"
+            class="hover:text-cyan-400 px-4 py-2 rounded-lg transition focus:bg-cyan-900 focus:text-cyan-300"
+            >Contact</a
+          >
         </nav>
       </div>
     </header>
+    <div class="h-16 md:h-20"></div> <!-- Spacer for fixed header -->
 
     <section
       class="hero flex flex-col items-center justify-center text-center py-20 bg-gradient-to-b from-gray-900 to-gray-800"
@@ -290,7 +336,7 @@
         fetchBTCPrice();
         setInterval(fetchBTCPrice, 15000);
 
-        // Crypto Market Table Logic
+        // Crypto Market Table Logic (CoinGecko, versi rapi)
         async function fetchMarketData() {
           const status = document.getElementById("marketStatus");
           status.textContent = "Loading market data...";
@@ -300,11 +346,19 @@
             );
             const data = await res.json();
             status.textContent = "";
-            return data;
+            // Map agar struktur konsisten dan aman
+            return data.map((coin) => ({
+              id: coin.id,
+              name: coin.name,
+              symbol: coin.symbol.toUpperCase(),
+              image: coin.image,
+              current_price: coin.current_price,
+              price_change_percentage_24h: coin.price_change_percentage_24h,
+              market_cap: coin.market_cap
+            }));
           } catch (e) {
-            console.error("Error fetching market data:", e); // Tambahkan log error
-            status.textContent =
-              "Failed to load market data. (CORS or network error)";
+            console.error("Error fetching market data:", e);
+            status.textContent = "Failed to load market data. (CORS or network error)";
             return [];
           }
         }
@@ -321,27 +375,17 @@
             row.innerHTML = `
               <td class="py-2 px-4">${idx + 1}</td>
               <td class="py-2 px-4 flex items-center gap-2">
-                <img src="${coin.image}" alt="${
-              coin.name
-            }" class="w-6 h-6 rounded-full" />
-                ${coin.name}
+                <img src="${coin.image}" alt="${coin.name}" class="w-6 h-6 rounded-full" />
+                <span class="font-semibold">${coin.name}</span>
               </td>
-              <td class="py-2 px-4 uppercase">${coin.symbol}</td>
-              <td class="py-2 px-4 text-right">$${coin.current_price.toLocaleString()}</td>
-              <td class="py-2 px-4 text-right ${
-                coin.price_change_percentage_24h >= 0
-                  ? "text-green-400"
-                  : "text-red-400"
-              }">
-                ${
-                  coin.price_change_percentage_24h
-                    ? coin.price_change_percentage_24h.toFixed(2)
-                    : "0.00"
-                }%
+              <td class="py-2 px-4 uppercase text-gray-300">${coin.symbol}</td>
+              <td class="py-2 px-4 text-right font-mono">$${coin.current_price.toLocaleString()}</td>
+              <td class="py-2 px-4 text-right font-mono ${coin.price_change_percentage_24h >= 0 ? "text-green-400" : "text-red-400"}">
+                ${coin.price_change_percentage_24h !== null && coin.price_change_percentage_24h !== undefined ? coin.price_change_percentage_24h.toFixed(2) : "0.00"}%
               </td>
-              <td class="py-2 px-4 text-right">$${coin.market_cap.toLocaleString()}</td>
+              <td class="py-2 px-4 text-right font-mono">$${coin.market_cap ? coin.market_cap.toLocaleString() : '-'}</td>
             `;
-            // Tambahkan event klik untuk modal detail coin
+            // Event klik untuk modal detail coin
             row.addEventListener("click", function () {
               showCoinDetail(coin.id);
             });
@@ -556,26 +600,26 @@
           });
 
         // Hamburger menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.getElementById('navMenu');
-        menuToggle.addEventListener('click', function() {
-          if (navMenu.classList.contains('opacity-0')) {
-            navMenu.classList.remove('opacity-0', 'pointer-events-none');
-            navMenu.classList.add('opacity-100', 'pointer-events-auto');
-            menuToggle.classList.add('active');
+        const menuToggle = document.getElementById("menuToggle");
+        const navMenu = document.getElementById("navMenu");
+        menuToggle.addEventListener("click", function () {
+          if (navMenu.classList.contains("opacity-0")) {
+            navMenu.classList.remove("opacity-0", "pointer-events-none");
+            navMenu.classList.add("opacity-100", "pointer-events-auto");
+            menuToggle.classList.add("active");
           } else {
-            navMenu.classList.add('opacity-0', 'pointer-events-none');
-            navMenu.classList.remove('opacity-100', 'pointer-events-auto');
-            menuToggle.classList.remove('active');
+            navMenu.classList.add("opacity-0", "pointer-events-none");
+            navMenu.classList.remove("opacity-100", "pointer-events-auto");
+            menuToggle.classList.remove("active");
           }
         });
         // Tutup menu saat klik link (mobile)
-        navMenu.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => {
+        navMenu.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
             if (window.innerWidth < 768) {
-              navMenu.classList.add('opacity-0', 'pointer-events-none');
-              navMenu.classList.remove('opacity-100', 'pointer-events-auto');
-              menuToggle.classList.remove('active');
+              navMenu.classList.add("opacity-0", "pointer-events-none");
+              navMenu.classList.remove("opacity-100", "pointer-events-auto");
+              menuToggle.classList.remove("active");
             }
           });
         });
