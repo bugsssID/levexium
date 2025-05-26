@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+body {
+  background: #0d1b2a;
+  color: #fff;
+  overflow-x: hidden;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background-color: #0a1623;
+}
+header img {
+  height: 50px;
+}
+nav a {
+  color: #fff;
+  margin-left: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+nav a:hover {
+  color: #00aaff;
+}
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 100px 20px;
+  background: linear-gradient(180deg, #0d1b2a 0%, #1e2d3f 100%);
+}
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+.hero p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin-bottom: 40px;
+}
+.hero button {
+  background-color: #00aaff;
+  border: none;
+  padding: 15px 30px;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hero button:hover {
+  background-color: #0088cc;
+}
+.info-section {
+  padding: 80px 60px;
+  background: #13283d;
+  text-align: center;
+}
+.info-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+.info-section p {
+  max-width: 800px;
+  margin: auto;
+  line-height: 1.6;
+}
+.contact {
+  padding: 60px;
+  background: #0a1623;
+  text-align: center;
+}
+.contact h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+.contact a {
+  display: block;
+  color: #00aaff;
+  font-size: 1.1rem;
+  margin: 10px 0;
+  text-decoration: none;
+}
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #09121b;
+  font-size: 0.9rem;
+}

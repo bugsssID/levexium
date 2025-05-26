@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Levexium | Cryptocurrency Project</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900 text-white font-inter">
+    <header
+      class="flex items-center justify-between px-8 py-4 bg-gray-800 shadow-md"
+    >
+      <img
+        src="img/lg_lvx.jpg"
+        alt="Levexium Logo"
+        class="h-12"
+        title="Levexium"
+      />
+      <div class="flex flex-col md:flex-row md:items-center md:space-x-6">
+        <span
+          id="realtimeInfo"
+          class="text-sm text-cyan-400 font-semibold mb-2 md:mb-0 md:mr-4"
+          >Loading price...</span
+        >
+        <nav class="space-x-6">
+          <a href="#home" class="hover:text-cyan-400 transition">Home</a>
+          <a href="#demo" class="hover:text-cyan-400 transition">Demo</a>
+          <a href="#about" class="hover:text-cyan-400 transition">About</a>
+          <a href="#market" class="hover:text-cyan-400 transition">Market</a>
+          <a href="#airdrop" class="hover:text-cyan-400 transition"
+            >Airdrop Protocol</a
+          >
+          <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <section
+      class="hero flex flex-col items-center justify-center text-center py-20 bg-gradient-to-b from-gray-900 to-gray-800"
+      id="home"
+    >
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Welcome to Levexium</h1>
+      <p class="text-lg md:text-xl mb-8 max-w-xl">
+        The next-generation crypto project designed to empower users with
+        smarter, faster, and more secure financial tools.
+      </p>
+      <button
+        onclick="scrollToInfo()"
+        class="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 rounded-lg font-semibold text-white shadow transition"
+      >
+        More Info
+      </button>
+    </section>
+
+    <section class="info-section max-w-3xl mx-auto py-16 px-6" id="about">
+      <h2 class="text-3xl font-semibold mb-4 text-cyan-400">About Levexium</h2>
+      <p class="text-gray-200">
+        Levexium is a modern cryptocurrency project aimed at building a powerful
+        ecosystem for trading, staking, and managing digital assets. Powered by
+        blockchain technology, Levexium focuses on transparency,
+        decentralization, and user empowerment. Our platform provides secure
+        wallets, real-time analytics, and smart contracts to ensure optimal
+        performance and reliability.
+      </p>
+    </section>
+
+    <section class="market-section max-w-5xl mx-auto py-16 px-6" id="market">
+      <h2 class="text-3xl font-semibold mb-6 text-cyan-400 text-center">
+        Crypto Market
+      </h2>
+      <div
+        class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+      >
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search cryptocurrency..."
+          class="w-full md:w-1/3 px-4 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+        />
+        <span id="marketStatus" class="text-sm text-gray-400"></span>
+      </div>
+      <div class="overflow-x-auto rounded-lg shadow">
+        <table class="min-w-full bg-gray-900 text-white" id="marketTable">
+          <thead>
+            <tr class="bg-gray-800">
+              <th class="py-3 px-4 text-left">#</th>
+              <th class="py-3 px-4 text-left">Name</th>
+              <th class="py-3 px-4 text-left">Symbol</th>
+              <th class="py-3 px-4 text-right">Price (USD)</th>
+              <th class="py-3 px-4 text-right">24h Change</th>
+              <th class="py-3 px-4 text-right">Market Cap</th>
+            </tr>
+          </thead>
+          <tbody id="marketBody">
+            <!-- Data will be inserted here by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="airdrop-section max-w-5xl mx-auto py-16 px-6" id="airdrop">
+      <h2 class="text-3xl font-semibold mb-6 text-cyan-400 text-center">
+        Tokenless Protocols That May Airdrop
+      </h2>
+      <div
+        class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+      >
+        <input
+          type="text"
+          id="airdropSearchInput"
+          placeholder="Search protocols..."
+          class="w-full md:w-1/3 px-4 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+        />
+      </div>
+      <div class="overflow-x-auto rounded-lg shadow">
+        <table class="min-w-full bg-gray-900 text-white" id="airdropTable">
+          <thead>
+            <tr class="bg-gray-800">
+              <th class="py-3 px-4 text-left">#</th>
+              <th class="py-3 px-4 text-left">Name</th>
+              <th class="py-3 px-4 text-left">Category</th>
+              <th class="py-3 px-4 text-right">TVL</th>
+              <th class="py-3 px-4 text-right">Total Money Raised</th>
+              <th class="py-3 px-4 text-right">Listed At</th>
+              <th class="py-3 px-4 text-right">1d Change</th>
+              <th class="py-3 px-4 text-right">7d Change</th>
+              <th class="py-3 px-4 text-right">1m Change</th>
+            </tr>
+          </thead>
+          <tbody id="airdropBody">
+            <!-- Data will be inserted here by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="contact bg-gray-800 py-12" id="contact">
+      <div class="max-w-xl mx-auto text-center">
+        <h3 class="text-2xl font-semibold mb-6 text-cyan-400">
+          Connect With Us
+        </h3>
+        <div class="flex flex-col gap-4 items-center">
+          <a
+            href="https://x.com/levexium"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:underline hover:text-cyan-400 transition"
+          >
+            <span class="inline-flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                class="w-5 h-5 text-cyan-400"
+              >
+                <path
+                  d="M22.162 5.656c-.793.352-1.646.59-2.54.697a4.48 4.48 0 0 0 1.963-2.475 8.93 8.93 0 0 1-2.828 1.082A4.466 4.466 0 0 0 11.07 9.03c0 .35.04.69.115 1.016-3.71-.186-7-1.963-9.197-4.663a4.48 4.48 0 0 0-.604 2.247c0 1.55.79 2.92 2.002 3.724a4.44 4.44 0 0 1-2.022-.56v.057a4.47 4.47 0 0 0 3.58 4.382c-.19.052-.39.08-.6.08-.146 0-.287-.014-.425-.04.288.9 1.12 1.555 2.106 1.573A8.97 8.97 0 0 1 2 19.54a12.67 12.67 0 0 0 6.86 2.01c8.23 0 12.74-6.82 12.74-12.74 0-.19-.004-.38-.013-.57a9.1 9.1 0 0 0 2.24-2.32z"
+                />
+              </svg>
+              X (Twitter): @levexium
+            </span>
+          </a>
+          <a
+            href="https://t.me/levexium"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:underline hover:text-cyan-400 transition"
+          >
+            <span class="inline-flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                class="w-5 h-5 text-cyan-400"
+              >
+                <path
+                  d="M9.04 13.44l-.37 5.18c.53 0 .76-.23 1.04-.5l2.5-2.38 5.18 3.8c.95.52 1.62.25 1.86-.88l3.38-15.9c.31-1.43-.52-2-1.44-1.66L1.6 9.3c-1.39.54-1.37 1.32-.24 1.66l4.1 1.28 9.52-6.02c.45-.28.87-.13.53.18z"
+                />
+              </svg>
+              Telegram: levexium
+            </span>
+          </a>
+          <a
+            href="https://levexium.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:underline hover:text-cyan-400 transition"
+          >
+            <span class="inline-flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                class="w-5 h-5 text-cyan-400"
+              >
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"
+                />
+              </svg>
+              Website: www.levexium.com
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="text-center py-6 bg-gray-900 text-gray-400">
+      &copy; 2025 Levexium. All rights reserved;
+    </footer>
+
+    <!-- Modal Detail Coin -->
+    <div
+      id="coinModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden"
+    >
+      <div
+        class="bg-gray-900 rounded-lg shadow-lg max-w-lg w-full relative p-6"
+      >
+        <button
+          id="closeModalBtn"
+          class="absolute top-2 right-2 text-gray-400 hover:text-cyan-400 text-2xl"
+        >
+          &times;
+        </button>
+        <div id="modalContent">
+          <!-- Coin detail will be rendered here -->
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      // Fallback: jalankan script utama jika script.js tidak berjalan
+      document.addEventListener("DOMContentLoaded", function () {
+        // Crypto Market Table Logic
+        async function fetchMarketData() {
+          const status = document.getElementById("marketStatus");
+          status.textContent = "Loading market data...";
+          try {
+            const res = await fetch(
+              "https://corsproxy.io/?https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false"
+            );
+            const data = await res.json();
+            status.textContent = "";
+            return data;
+          } catch (e) {
+            console.error("Error fetching market data:", e); // Tambahkan log error
+            status.textContent = "Failed to load market data.";
+            return [];
+          }
+        }
+
+        function renderTable(data) {
+          const tbody = document.getElementById("marketBody");
+          tbody.innerHTML = "";
+          data.forEach((coin, idx) => {
+            const row = document.createElement("tr");
+            row.className =
+              idx % 2 === 0
+                ? "bg-gray-900 cursor-pointer hover:bg-gray-700 transition"
+                : "bg-gray-800 cursor-pointer hover:bg-gray-700 transition";
+            row.innerHTML = `
+              <td class="py-2 px-4">${idx + 1}</td>
+              <td class="py-2 px-4 flex items-center gap-2">
+                <img src="${coin.image}" alt="${
+              coin.name
+            }" class="w-6 h-6 rounded-full" />
+                ${coin.name}
+              </td>
+              <td class="py-2 px-4 uppercase">${coin.symbol}</td>
+              <td class="py-2 px-4 text-right">$${coin.current_price.toLocaleString()}</td>
+              <td class="py-2 px-4 text-right ${
+                coin.price_change_percentage_24h >= 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }">
+                ${
+                  coin.price_change_percentage_24h
+                    ? coin.price_change_percentage_24h.toFixed(2)
+                    : "0.00"
+                }%
+              </td>
+              <td class="py-2 px-4 text-right">$${coin.market_cap.toLocaleString()}</td>
+            `;
+            // Tambahkan event klik untuk modal detail coin
+            row.addEventListener("click", function () {
+              showCoinDetail(coin.id);
+            });
+            tbody.appendChild(row);
+          });
+        }
+
+        // Modal logic
+        const coinModal = document.getElementById("coinModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        closeModalBtn.addEventListener("click", () => {
+          coinModal.classList.add("hidden");
+        });
+        coinModal.addEventListener("click", (e) => {
+          if (e.target === coinModal) coinModal.classList.add("hidden");
+        });
+
+        async function showCoinDetail(coinId) {
+          const modalContent = document.getElementById("modalContent");
+          modalContent.innerHTML =
+            '<div class="text-center py-8 text-gray-400">Loading...</div>';
+          coinModal.classList.remove("hidden");
+          try {
+            // Fetch detail coin
+            const [detailRes, chartRes] = await Promise.all([
+              fetch(`https://api.coingecko.com/api/v3/coins/${coinId}`),
+              fetch(
+                `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7&interval=daily`
+              ),
+            ]);
+            const detail = await detailRes.json();
+            const chart = await chartRes.json();
+            // Render detail
+            modalContent.innerHTML = `
+              <div class="flex items-center gap-4 mb-4">
+                <img src="${detail.image.large}" alt="${
+              detail.name
+            }" class="w-12 h-12 rounded-full" />
+                <div>
+                  <h3 class="text-2xl font-bold">${
+                    detail.name
+                  } <span class="text-base text-gray-400">(${detail.symbol.toUpperCase()})</span></h3>
+                  <div class="text-cyan-400 font-semibold text-lg">$${detail.market_data.current_price.usd.toLocaleString()}</div>
+                </div>
+              </div>
+              <div class="mb-2 text-gray-300 text-sm">${
+                detail.description.en
+                  ? detail.description.en.split(". ")[0] + "."
+                  : "-"
+              }</div>
+              <div class="mb-2 text-gray-400 text-xs">Rank: ${
+                detail.market_cap_rank || "-"
+              }</div>
+              <div class="mb-2 text-gray-400 text-xs">Market Cap: $${detail.market_data.market_cap.usd.toLocaleString()}</div>
+              <div class="mb-2 text-gray-400 text-xs">24h Change: <span class="${
+                detail.market_data.price_change_percentage_24h >= 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }">${
+              detail.market_data.price_change_percentage_24h
+                ? detail.market_data.price_change_percentage_24h.toFixed(2)
+                : "0.00"
+            }%</span></div>
+              <div class="mb-2 text-gray-400 text-xs">Homepage: <a href="${
+                detail.links.homepage[0]
+              }" target="_blank" class="text-cyan-400 underline">${
+              detail.links.homepage[0]
+            }</a></div>
+              <div class="my-4">
+                <canvas id="coinChart" height="120"></canvas>
+              </div>
+            `;
+            renderCoinChart(chart.prices);
+          } catch (e) {
+            modalContent.innerHTML =
+              '<div class="text-center py-8 text-red-400">Failed to load coin detail.</div>';
+          }
+        }
+
+        function renderCoinChart(prices) {
+          if (!window.Chart) {
+            // Chart.js CDN jika belum ada
+            const script = document.createElement("script");
+            script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+            script.onload = () => renderCoinChart(prices);
+            document.body.appendChild(script);
+            return;
+          }
+          const ctx = document.getElementById("coinChart").getContext("2d");
+          const data = prices.map((p) => p[1]);
+          const labels = prices.map((p, i) => `Day ${i + 1}`);
+          if (window.coinChartInstance) window.coinChartInstance.destroy();
+          window.coinChartInstance = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: "Price (USD)",
+                  data,
+                  borderColor: "#06b6d4",
+                  backgroundColor: "rgba(6,182,212,0.1)",
+                  fill: true,
+                  tension: 0.4,
+                  pointRadius: 2,
+                },
+              ],
+            },
+            options: {
+              plugins: { legend: { display: false } },
+              scales: {
+                x: { display: false },
+                y: { display: true, ticks: { color: "#94a3b8" } },
+              },
+              responsive: true,
+              maintainAspectRatio: false,
+            },
+          });
+        }
+
+        let allMarketData = [];
+        fetchMarketData().then((data) => {
+          allMarketData = data;
+          renderTable(data);
+        });
+
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", function (e) {
+            const val = e.target.value.toLowerCase();
+            const filtered = allMarketData.filter(
+              (coin) =>
+                coin.name.toLowerCase().includes(val) ||
+                coin.symbol.toLowerCase().includes(val)
+            );
+            renderTable(filtered);
+          });
+
+        // Airdrop Table Logic (Realtime from API)
+        async function fetchAirdropData() {
+          const status = document.getElementById("airdropStatus");
+          if (status) status.textContent = "Loading airdrop data...";
+          try {
+            // Ganti URL API berikut dengan endpoint API airdrop yang valid
+            const res = await fetch("https://api.llama.fi/airdrop/eligible");
+            const data = await res.json();
+            if (status) status.textContent = "";
+            return data.protocols || [];
+          } catch (e) {
+            if (status) status.textContent = "Failed to load airdrop data.";
+            return [];
+          }
+        }
+
+        function renderAirdropTable(data) {
+          const tbody = document.getElementById("airdropBody");
+          tbody.innerHTML = "";
+          data.forEach((item, idx) => {
+            const row = document.createElement("tr");
+            row.className = idx % 2 === 0 ? "bg-gray-900" : "bg-gray-800";
+            row.innerHTML = `
+              <td class="py-2 px-4">${idx + 1}</td>
+              <td class="py-2 px-4">${item.name || "-"}</td>
+              <td class="py-2 px-4">${item.category || "-"}</td>
+              <td class="py-2 px-4 text-right">${
+                item.tvl ? "$" + item.tvl.toLocaleString() : "-"
+              }</td>
+              <td class="py-2 px-4 text-right">${item.raised || "-"}</td>
+              <td class="py-2 px-4 text-right">${item.listed || "-"}</td>
+              <td class="py-2 px-4 text-right">${
+                item.change1d !== undefined ? item.change1d + "%" : "-"
+              }</td>
+              <td class="py-2 px-4 text-right">${
+                item.change7d !== undefined ? item.change7d + "%" : "-"
+              }</td>
+              <td class="py-2 px-4 text-right">${
+                item.change1m !== undefined ? item.change1m + "%" : "-"
+              }</td>
+            `;
+            tbody.appendChild(row);
+          });
+        }
+
+        // Tambahkan elemen status untuk airdrop
+        const airdropStatusSpan = document.createElement("span");
+        airdropStatusSpan.id = "airdropStatus";
+        airdropStatusSpan.className = "text-sm text-gray-400";
+        const airdropInput = document.getElementById("airdropSearchInput");
+        if (airdropInput && airdropInput.parentNode) {
+          airdropInput.parentNode.appendChild(airdropStatusSpan);
+        }
+
+        let allAirdropData = [];
+        fetchAirdropData().then((data) => {
+          allAirdropData = data;
+          renderAirdropTable(data);
+        });
+
+        document
+          .getElementById("airdropSearchInput")
+          .addEventListener("input", function (e) {
+            const val = e.target.value.toLowerCase();
+            const filtered = allAirdropData.filter(
+              (item) =>
+                (item.name || "").toLowerCase().includes(val) ||
+                (item.category || "").toLowerCase().includes(val)
+            );
+            renderAirdropTable(filtered);
+          });
+      });
+    </script>
+  </body>
+</html>
